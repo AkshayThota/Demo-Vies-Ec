@@ -1,0 +1,68 @@
+<resources>
+    <string name="app_name">Vies Demo</string>
+    <string name="prefetch_request">
+    boolean useBetaAssets = true;\n\n
+    JSONObject payload = new JSONObject();\n
+    JSONObject innerPayload = new JSONObject();\n
+    JSONArray services = new JSONArray();\n
+    try {\n
+    innerPayload.put("clientId", "merchantId" + "_android");\n
+    payload.put("betaAssets", true);\n
+    payload.put("payload", innerPayload);\n
+    payload.put("service", "in.juspay.ec");\n
+    } catch (JSONException e) {\n
+    e.printStackTrace();\n
+    }\n
+    HyperServices.preFetch(MainActivity.this, payload);\n
+    </string>
+
+    <string name="initiate_request">
+HyperServices hyperServices = new HyperServices(MainActivity.this);\n
+    final JSONObject object = new JSONObject()\n
+    try{\n
+        object.put("requestId",new Random().nextInt(10000)+"");\n
+        object.put(PaymentConstants.SERVICE,"in.juspay.ec");\n
+        JSONObject payload = new JSONObject();\n
+        payload.put("action","initiate");\n
+        payload.put("merchantId", "merchantId");\n
+        payload.put("clientId", "merchantId" + "_android");\n
+        payload.put("customerId", "1234567890");\n
+        payload.put("environment", "sandbox");\n
+        payload.put("package_name", "com.example.yourapp");\n
+        payload.put("safetyNetApiKey", "A***********E");\n
+        object.put("payload",payload);\n
+    }catch (Exception e){\n
+        e.printStackTrace();\n
+    }\n
+hyperServices.initiate(object, new HyperPaymentsCallbackAdapter() {\n
+    @Override\n
+    public void onEvent(JSONObject json, JuspayResponseHandler handler) {\n
+        try {\n
+            String event = json.optString("event", "");\n
+            if (event.equals("initiate_result")){\n
+                //show the initiate result here\n
+                Log.d(object.toString(2));\n
+            }\n
+        } catch(JSONException e) {\n
+            Log.e("Exception", "Exception in onEvent", e);\n
+        }\n
+    }\n
+});</string>
+
+    <string-array name="environment_spinner_values">
+        <item>Sandbox</item>
+        <item>Production</item>
+    </string-array>
+
+    <string-array name="localEligibility_spinner_values">
+        <item>True</item>
+        <item>False</item>
+    </string-array>
+
+    <string-array name="useBetaAssets_spinner_values">
+        <item>True</item>
+        <item>False</item>
+    </string-array>
+
+
+</resources>
