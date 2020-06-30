@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Vies Demo</string>
+
+    <string-array name="environment_spinner_values">
+        <item>Sandbox</item>
+        <item>Production</item>
+    </string-array>
+
+    <string-array name="localEligibility_spinner_values">
+        <item>True</item>
+        <item>False</item>
+    </string-array>
+
+
+</resources>

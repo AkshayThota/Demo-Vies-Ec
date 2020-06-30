@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#131359</color>
+    <color name="colorPrimaryDark">#131359</color>
+    <color name="colorAccent">#43458D</color>
+
+    <color name="controlBackground">#F1F1F1</color>
+
+    <color name="windowBackground">#E4E4E4</color>
+    <color name="editTextBackground">@color/controlBackground</color>
+    <color name="spinnerBackground">@color/controlBackground</color>
+</resources>
