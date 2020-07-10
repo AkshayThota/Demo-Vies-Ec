@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://maven.juspay.in/jp-build-packages/beta/"
-    }
 //    maven {
-//        url "https://maven.juspay.in/jp-build-packages/release/"
+//       url "https://maven.juspay.in/jp-build-packages/beta/"
 //    }
+    maven {
+        url "https://maven.juspay.in/jp-build-packages/release/"
+    }
 }
 
 android {
@@ -34,7 +34,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.cardview:cardview:1.0.0'
 
-    implementation 'in.juspay:godel-vies:1.1.0.32'
+    implementation 'in.juspay:godel-vies:1.1.0.30'
     api (project(':GooglePaySDK'))
 
     testImplementation 'junit:junit:4.12'
