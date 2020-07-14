@@ -17,18 +17,24 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+
+import in.juspay.hypersdk.core.PaymentConstants;
+import in.juspay.hypersdk.data.JuspayResponseHandler;
+import in.juspay.hypersdk.ui.HyperPaymentsCallback;
+import in.juspay.hypersdk.ui.JuspayPaymentsCallback;
+import in.juspay.hypersdk.ui.JuspayWebView;
 import in.juspay.viesdemo.util.ViewBinder;
 import in.juspay.viesdemo.util.ViewBinder.Binding;
 import in.juspay.viesdemo.util.CardTextWatcher;
 import in.juspay.viesdemo.util.Utils;
-import in.juspay.godel.core.PaymentConstants;
-import in.juspay.godel.data.JuspayResponseHandler;
-import in.juspay.godel.ui.JuspayPaymentsCallback;
-import in.juspay.godel.ui.JuspayWebView;
-import in.juspay.services.PaymentServices;
+//import in.juspay.godel.core.PaymentConstants;
+//import in.juspay.godel.data.JuspayResponseHandler;
+//import in.juspay.godel.ui.JuspayPaymentsCallback;
+//import in.juspay.godel.ui.JuspayWebView;
+import in.juspay.services.HyperServices;
 import in.juspay.vies.Card;
-import in.juspay.vies.VIESConstants;
-import in.juspay.vies.VIESHelper;
+//import in.juspay.vies.VIESConstants;
+//import in.juspay.vies.VIESHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         2. Add Proper Logs
      */
 
-    private PaymentServices paymentServices;
+    private HyperServices hyperServices;
 
     @Binding private EditText amountField;
     @Binding private EditText cardNumberField;
@@ -57,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     @Binding private Button payButton;
     @Binding private Button deEnrollButton;
     @Binding private Button deleteCardButton;
+    @Binding private Button initiateButton;
     static final int SETTINGS_ACTIVITY_REQUEST_CODE = 9810;
     static boolean paymentServiceObject = false;
 
@@ -98,10 +105,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(Preferences.useLocalEligibility.equalsIgnoreCase("true")) {
-                    getLocalEligibility();
+//                    getLocalEligibility();
                 }
                 else {
-                    initiateViesSdk();
+//                    initiateViesSdk();
                     getEligibility();
                 }
             }
@@ -110,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initiateViesSdk();
+//                initiateViesSdk();
                 payOnViesSdk(MainActivity.this);
             }
         });
@@ -118,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         deEnrollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initiateViesSdk();
+//                initiateViesSdk();
                 deEnrollOnViesSdk(MainActivity.this);
             }
         });
@@ -126,22 +133,28 @@ public class MainActivity extends AppCompatActivity {
         deleteCardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initiateViesSdk();
+//                initiateViesSdk();
                 onDeleteCardButtonClicked();
             }
         });
         gpayEligibility.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                initiateViesSdk();
+//                initiateViesSdk();
                 gpayEligibilityCheck();
             }
         });
         gpayPay.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                initiateViesSdk();
+//                initiateViesSdk();
                 gpayPay(MainActivity.this);
+            }
+        });
+        initiateButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                initiateViesSdk();
             }
         });
 
@@ -156,14 +169,15 @@ public class MainActivity extends AppCompatActivity {
         viesBundle.putString(PaymentConstants.CUSTOMER_ID, Preferences.getCustomerId(this));
         viesBundle.putString(PaymentConstants.ENV, Preferences.environment);
         viesBundle.putString(PaymentConstants.SERVICE, "in.juspay.vies");
-        viesBundle.putString(VIESConstants.TEST_MODE, Preferences.test_mode);
-        viesBundle.putString(VIESConstants.PACKAGE_NAME, Preferences.appId);
-        viesBundle.putString(VIESConstants.SAFETYNET_API_KEY, Preferences.safetyNetApiKey);
+        viesBundle.putString(PaymentConstants.TEST_MODE, Preferences.test_mode);
+        viesBundle.putString(PaymentConstants.PACKAGE_NAME, Preferences.appId);
+        viesBundle.putString(PaymentConstants.SAFETYNET_API_KEY, Preferences.safetyNetApiKey);
+        viesBundle.putString("betaAssets", "true");
 
         // Create the PaymentServices instance and initiate the SDK
-        paymentServices = new PaymentServices(this);
+        hyperServices = new HyperServices(this);
         paymentServiceObject = true ;
-        paymentServices.initiate(viesBundle, new JuspayPaymentsCallback() {
+        hyperServices.initiate(viesBundle, new JuspayPaymentsCallback() {
             @Override
             public void onStartWaitingDialogCreated(@Nullable View view) {
             }
@@ -186,9 +200,9 @@ public class MainActivity extends AppCompatActivity {
                     // For demo purposes, we show the JSON response in the UI
                     Intent intent = new Intent(MainActivity.this, ResponseViewActivity.class);
                     intent.putExtra("response", result.toString(2));
-                    paymentServices.terminate();
+//                    hyperServices.terminate();
                     startActivityForResult(intent, 1);
-                    initiateViesSdk();
+//                    initiateViesSdk();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -212,46 +226,46 @@ public class MainActivity extends AppCompatActivity {
             payload.put("action", "GPAY_ELIGIBILITY");
             payload.put("service", "in.juspay.gpay");
             payload.put("request_id", "dummy_request_id1asdf");
-            paymentServices.process("GPAY_ELIG", payload);
+            hyperServices.process("GPAY_ELIG", payload);
         }catch (Exception e){
 
         }
 
     }
 
-    private void getLocalEligibility() {
-
-        String cardNumber = cardNumberField.getText().toString();
-        Card card = Utils.getCard(cardNumber);
-        String amount = amountField.getText().toString();
-
-        try {
-            JSONObject payload = new JSONObject();
-
-            payload.put("customer_id", Preferences.getCustomerId(this));
-            payload.put("action", "VIES_ELIGIBILITY");
-            payload.put("amount", amount);
-            payload.put("cards", new JSONArray(Collections.singletonList(card.toJSON())));
-            payload.put(VIESConstants.ENV, Preferences.environment);
-            payload.put("request_id", "dummy_request_id1");
-
-            String response = VIESHelper.getLocalEligibility(this, payload);
-
-            JSONObject res = new JSONObject(response);
-            JSONObject response_payload = res.getJSONObject(PaymentConstants.PAYLOAD);
-
-            Log.d("MainActivity", String.format("event: %s, payload: %s", "ELIGIBILITY", response_payload.toString()));
-
-            // Displaying result on Response View
-            Intent intent = new Intent(MainActivity.this, ResponseViewActivity.class);
-            intent.putExtra("response", response_payload.toString(2));
-            startActivityForResult(intent, 1);
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void getLocalEligibility() {
+//
+//        String cardNumber = cardNumberField.getText().toString();
+//        Card card = Utils.getCard(cardNumber);
+//        String amount = amountField.getText().toString();
+//
+//        try {
+//            JSONObject payload = new JSONObject();
+//
+//            payload.put("customer_id", Preferences.getCustomerId(this));
+//            payload.put("action", "VIES_ELIGIBILITY");
+//            payload.put("amount", amount);
+//            payload.put("cards", new JSONArray(Collections.singletonList(card.toJSON())));
+//            payload.put(PaymentConstants.ENV, Preferences.environment);
+//            payload.put("request_id", "dummy_request_id1");
+//
+////            String response = VIESHelper.getLocalEligibility(this, payload);
+//
+//            JSONObject res = new JSONObject(response);
+//            JSONObject response_payload = res.getJSONObject(PaymentConstants.PAYLOAD);
+//
+//            Log.d("MainActivity", String.format("event: %s, payload: %s", "ELIGIBILITY", response_payload.toString()));
+//
+//            // Displaying result on Response View
+//            Intent intent = new Intent(MainActivity.this, ResponseViewActivity.class);
+//            intent.putExtra("response", response_payload.toString(2));
+//            startActivityForResult(intent, 1);
+//
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void getEligibility() {
         String cardNumber = cardNumberField.getText().toString();
@@ -265,8 +279,9 @@ public class MainActivity extends AppCompatActivity {
             payload.put("action", "VIES_ELIGIBILITY");
             payload.put("cards", new JSONArray(Collections.singletonList(card.toJSON())));
             payload.put("amount", amount);
+            payload.put("service", "in.juspay.vies");
 
-            paymentServices.process("ELIG", payload);
+            hyperServices.process("ELIG", payload);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -353,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
             payload.put(PaymentConstants.AMOUNT, amount);
             payload.put(PaymentConstants.MERCHANT_ID, Preferences.merchantId);
 
-            paymentServices.process("GPAY_PAY", payload);
+            hyperServices.process("GPAY_PAY", payload);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -370,13 +385,14 @@ public class MainActivity extends AppCompatActivity {
 
             payload.put("action", "VIES_PAY");
             payload.put("card", card.toJSON());
+            payload.put("service", "in.juspay.vies");
             payload.put("juspay_txn_resp", txnsResponse);
             payload.put("safetynet_api_key", Preferences.safetyNetApiKey);
             payload.put(PaymentConstants.AMOUNT, amount);
             payload.put(PaymentConstants.MERCHANT_ID, Preferences.merchantId);
             payload.put("merchant_root_view", String.valueOf(R.id.main_view));
 
-            paymentServices.process("PAY", payload);
+            hyperServices.process("PAY", payload);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -414,8 +430,9 @@ public class MainActivity extends AppCompatActivity {
             payload.put("action", "VIES_DISENROLL");
             payload.put("card", card.toJSON());
             payload.put("session_token", sessionToken);
+            payload.put("service", "in.juspay.vies");
 
-            paymentServices.process("DISENROLL", payload);
+            hyperServices.process("DISENROLL", payload);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -430,8 +447,9 @@ public class MainActivity extends AppCompatActivity {
 
             payload.put("action", "VIES_DELETE_CARD");
             payload.put("card", card.toJSON());
+            payload.put("service", "in.juspay.vies");
 
-            paymentServices.process("DELETE_CARD", payload);
+            hyperServices.process("DELETE_CARD", payload);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -440,12 +458,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        paymentServices.terminate();
+        hyperServices.terminate();
     }
 
     @Override
     public void onBackPressed() {
-        if(!paymentServices.onBackPressed()) {
+        if(!hyperServices.onBackPressed()) {
             super.onBackPressed();
         }
     }
@@ -462,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.settingsIcon) {
             Intent intent = new Intent(this, SettingsActivity.class);
             if(paymentServiceObject) {
-                paymentServices.terminate();
+                hyperServices.terminate();
             }
             startActivityForResult(intent, SETTINGS_ACTIVITY_REQUEST_CODE);
         }
@@ -473,7 +491,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == SETTINGS_ACTIVITY_REQUEST_CODE) {
-            initiateViesSdk();
+//            initiateViesSdk();
         }
     }
 }

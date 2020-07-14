@@ -11,9 +11,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import in.juspay.hypersdk.core.PaymentConstants;
 import in.juspay.viesdemo.util.ViewBinder;
 import in.juspay.viesdemo.util.ViewBinder.Binding;
-import in.juspay.godel.core.PaymentConstants;
+//import in.juspay.godel.core.PaymentConstants;
 
 public class SettingsActivity extends AppCompatActivity {
 

@@ -143,6 +143,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:padding="20dp">
                     <Button
+                            android:text="Initiate"
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content" android:id="@+id/initiateButton"/>
+                    <Button
                             android:text="Eligibility"
                             android:layout_width="300dp"
                             android:layout_height="wrap_content" android:id="@+id/eligibilityButton"/>
