@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import in.juspay.hypersdk.core.PaymentConstants;
 import in.juspay.hypersdk.data.JuspayResponseHandler;
@@ -194,15 +195,16 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject result = new JSONObject(json);
                     String event = result.getString("event");
                     JSONObject payload = result.getJSONObject(PaymentConstants.PAYLOAD);
-
                     Log.d("JRH (onEvent)", String.format("event: %s, payload: %s", event, payload.toString()));
-
                     // For demo purposes, we show the JSON response in the UI
-                    Intent intent = new Intent(MainActivity.this, ResponseViewActivity.class);
-                    intent.putExtra("response", result.toString(2));
-//                    hyperServices.terminate();
-                    startActivityForResult(intent, 1);
-//                    initiateViesSdk();
+                    if (event.equals("initiate_result")) {
+                        Toast.makeText(MainActivity.this, json, Toast.LENGTH_SHORT).show();
+                    }else{
+                        Intent intent = new Intent(MainActivity.this, ResponseViewActivity.class);
+                        intent.putExtra("response", result.toString(2));
+                        hyperServices.terminate();
+                        startActivityForResult(intent, 1);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
