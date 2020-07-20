@@ -1,5 +1,6 @@
 package in.juspay.viesdemo;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import in.juspay.hypersdk.core.PaymentConstants;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     @Binding private EditText cardNumberField;
     @Binding private EditText cardExpiryField;
     @Binding private EditText cardCvvField;
+    @Binding private TextView outputResult;
 
     @Binding private Toolbar toolbar;
 
@@ -188,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
                 WebView.setWebContentsDebuggingEnabled(true);
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onEvent(String json, JuspayResponseHandler juspayResponseHandler) {
                 try {
@@ -200,10 +204,12 @@ public class MainActivity extends AppCompatActivity {
                     if (event.equals("initiate_result")) {
                         Toast.makeText(MainActivity.this, json, Toast.LENGTH_SHORT).show();
                     }else{
-                        Intent intent = new Intent(MainActivity.this, ResponseViewActivity.class);
-                        intent.putExtra("response", result.toString(2));
-                        hyperServices.terminate();
-                        startActivityForResult(intent, 1);
+                        outputResult.setText( "Result :" + result.toString());
+                        // printing result in the same activity
+//                        Intent intent = new Intent(MainActivity.this, ResponseViewActivity.class);
+//                        intent.putExtra("response", result.toString(2));
+//                        hyperServices.terminate();
+//                        startActivityForResult(intent, 1);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

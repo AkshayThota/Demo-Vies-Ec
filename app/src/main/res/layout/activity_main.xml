@@ -170,6 +170,11 @@
                             android:text="GPAY Pay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" android:id="@+id/gpayPay"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/outputResult"
+                    />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
