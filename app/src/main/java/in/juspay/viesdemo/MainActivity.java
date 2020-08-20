@@ -21,12 +21,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 //import in.juspay.godel.PaymentActivity;
+import in.juspay.hypersdk.core.MerchantViewType;
 import in.juspay.hypersdk.core.PaymentConstants;
 import in.juspay.hypersdk.data.JuspayResponseHandler;
 import in.juspay.hypersdk.ui.HyperPaymentsCallback;
@@ -180,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
                     payload.put("merchantId", Preferences.merchantId);
                     payload.put("clientId", Preferences.clientId);
                     payload.put("customerId", Preferences.getCustomerId(MainActivity.this));
+                    payload.put("drawFromStatusBar", "true");
                     payload.put(PaymentConstants.ENV, Preferences.environment);
                     payload.put(PaymentConstants.PACKAGE_NAME, Preferences.appId);
                     payload.put("safetynetApiKey", Preferences.safetyNetApiKey);
@@ -360,6 +363,18 @@ public class MainActivity extends AppCompatActivity {
 
             @Nullable
             @Override
+            public View getMerchantView(ViewGroup viewGroup, MerchantViewType merchantViewType) {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public WebViewClient createJuspaySafeWebViewClient() {
+                return null;
+            }
+
+            @Nullable
+//            @Override
             public View getMerchantView(ViewGroup viewGroup) {
                 return null;
             }
