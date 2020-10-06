@@ -5,7 +5,7 @@ import android.util.Base64;
 import com.google.android.gms.security.ProviderInstaller;
 
 import in.juspay.hypersdk.core.PaymentConstants;
-import in.juspay.hypersdk.utils.network.JuspayHttpResponse;
+//import in.juspay.hypersdk.utils.network.JuspayHttpResponse;
 import in.juspay.viesdemo.Preferences;
 //import in.juspay.android_lib.netutils.JuspayHttpResponse;
 //import in.juspay.godel.core.PaymentConstants;

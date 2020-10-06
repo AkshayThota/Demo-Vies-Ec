@@ -17,11 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 //import in.juspay.godel.PaymentActivity;
+import in.juspay.hypersdk.core.MerchantViewType;
 import in.juspay.hypersdk.core.PaymentConstants;
 import in.juspay.hypersdk.data.JuspayResponseHandler;
 import in.juspay.hypersdk.ui.HyperPaymentsCallback;
@@ -29,6 +31,7 @@ import in.juspay.hypersdk.ui.HyperPaymentsCallbackAdapter;
 import in.juspay.hypersdk.ui.JuspayWebView;
 import in.juspay.services.HyperServices;
 //import in.juspay.services.PaymentServices;
+import in.juspay.vies.VIESHelper;
 import in.juspay.viesdemo.util.ViewBinder;
 import in.juspay.viesdemo.util.ViewBinder.Binding;
 import in.juspay.viesdemo.util.CardTextWatcher;
@@ -110,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(Preferences.useLocalEligibility.equalsIgnoreCase("true")) {
-//                    getLocalEligibility();
+                    getLocalEligibility();
                 }
                 else {
 //                    initiateECSdk();
@@ -477,6 +480,18 @@ public class MainActivity extends AppCompatActivity {
 
             @Nullable
             @Override
+            public View getMerchantView(ViewGroup viewGroup, MerchantViewType merchantViewType) {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public WebViewClient createJuspaySafeWebViewClient() {
+                return null;
+            }
+
+            @Nullable
+//            @Override
             public View getMerchantView(ViewGroup viewGroup) {
                 return null;
             }
@@ -909,6 +924,40 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+
+    private void getLocalEligibility() {
+
+        String cardNumber = cardNumberField.getText().toString();
+        Card card = Utils.getCard(cardNumber);
+        String amount = amountField.getText().toString();
+
+        try {
+            JSONObject payload = new JSONObject();
+
+            payload.put("customer_id", Preferences.getCustomerId(this));
+            payload.put("action", "VIES_ELIGIBILITY");
+            payload.put("amount", amount);
+            payload.put("cards", new JSONArray(Collections.singletonList(card.toJSON())));
+            payload.put("environment", Preferences.environment);
+            payload.put("request_id", "dummy_request_id1");
+
+            String response = VIESHelper.getLocalEligibility(this, payload);
+
+            JSONObject res = new JSONObject(response);
+            JSONObject response_payload = res.getJSONObject(PaymentConstants.PAYLOAD);
+
+            Log.d("MainActivity", String.format("event: %s, payload: %s", "ELIGIBILITY", response_payload.toString()));
+
+            // Displaying result on Response View
+            Intent intent = new Intent(MainActivity.this, ResponseViewActivity.class);
+            intent.putExtra("response", response_payload.toString(2));
+            startActivityForResult(intent, 1);
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
