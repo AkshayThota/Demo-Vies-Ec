@@ -512,10 +512,12 @@ public class MainActivity extends AppCompatActivity {
             object.put("requestId", new Random().nextInt(10000)+"");
             object.put("service", "in.juspay.vies");
 
-            payload.put("action", "VIES_ELIGIBILITY");
-            payload.put("cards", new JSONArray(Collections.singletonList(card.toJSON())));
-            payload.put("amount", amount);
+            object.put("action", "VIES_ELIGIBILITY");
+            object.put("cards", new JSONArray(Collections.singletonList(card.toJSON())));
+            object.put("amount", amount);
             object.put("payload", payload);
+            object.put("customer_id", "dreamplug_direct");
+            object.put("environment", "sandbox");
 
             Log.d("EligibilityReq", object.toString(2));
 
@@ -937,10 +939,13 @@ public class MainActivity extends AppCompatActivity {
 
             payload.put("customer_id", Preferences.getCustomerId(this));
             payload.put("action", "VIES_ELIGIBILITY");
+            payload.put("service", "in.juspay.vies");
             payload.put("amount", amount);
             payload.put("cards", new JSONArray(Collections.singletonList(card.toJSON())));
             payload.put("environment", Preferences.environment);
             payload.put("request_id", "dummy_request_id1");
+
+            Log.d("LocalEReq", payload.toString(2));
 
             String response = VIESHelper.getLocalEligibility(this, payload);
 
