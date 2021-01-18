@@ -89,17 +89,6 @@ public final class Utils {
         payload.put("card_alias", cardAlias);
         payload.put("save_to_locker", "true");
         payload.put("format", "json");
-        payload.put("order.udf1","udit");
-        payload.put("order.udf2","udit");
-        payload.put("order.udf3","udit");
-        payload.put("order.udf4","udit");
-        payload.put("order.udf5","udit");
-//        payload.put("order.udf6,","udit");
-//        payload.put("udf6","udit");
-        payload.put("order.udf7","udit");
-        payload.put("order.udf8","udit");
-        payload.put("order.udf9","udit");
-        payload.put("order.udf10","udit");
 
         try {
             return fromResponse(createRequest(context, url, "POST", headers, payload));

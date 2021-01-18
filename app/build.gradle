@@ -35,7 +35,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
 
 
-    implementation 'in.juspay:hypersdk:2.0.1-rc.13'
+    implementation 'in.juspay:hypersdk:2.0.1-rc.62'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
