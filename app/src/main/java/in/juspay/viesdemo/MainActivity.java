@@ -46,6 +46,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -83,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
     static final int SETTINGS_ACTIVITY_REQUEST_CODE = 9810;
     static boolean paymentServiceObject = false;
     ArrayList<String> endUrls = new ArrayList<>(Arrays.asList(".*sandbox.juspay.in\\/end.*",".*api.juspay.in\\/end.*"));
+    ArrayList<AppPayEligibiltyData> appPayEligibiltyData;
+    class AppPayEligibiltyData {
+        public String mobile;
+        public boolean cred;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(Preferences.useLocalEligibility.equalsIgnoreCase("true")) {
-//                    getLocalEligibility();
+                    getEligibility();
                 }
                 else {
 //                    initiateECSdk();
@@ -182,10 +188,10 @@ public class MainActivity extends AppCompatActivity {
                     payload.put("merchantId", Preferences.merchantId);
                     payload.put("clientId", Preferences.clientId);
                     payload.put("customerId", Preferences.getCustomerId(MainActivity.this));
-                    payload.put("drawFromStatusBar", "true");
+//                    payload.put("drawFromStatusBar", "true");
                     payload.put(PaymentConstants.ENV, Preferences.environment);
-                    payload.put(PaymentConstants.PACKAGE_NAME, Preferences.appId);
-                    payload.put("safetynetApiKey", Preferences.safetyNetApiKey);
+//                    payload.put(PaymentConstants.PACKAGE_NAME, Preferences.appId);
+//                    payload.put("safetynetApiKey", Preferences.safetyNetApiKey);
                     object.put(PaymentConstants.PAYLOAD,payload);
 
                     Log.d("initiateReq", object.toString(2));
@@ -382,49 +388,101 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void getEligibility() {
-        String cardNumber = cardNumberField.getText().toString();
-        String amount = amountField.getText().toString();
-        String cardFingerPrint = cardFingerPrintField.getText().toString();
+    public void getEligibility(){
+        try{
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("action","eligibility");
+            jsonObject.put("requestID","123456");
+            jsonObject.put("service","in.juspay.ec");
+//            jsonObject.put("orderId", bundle.getString(PaymentConstants.ORDER_ID));
+//            jsonObject.put("clientAuthToken", bundle.getString(PaymentConstants.CLIENT_AUTH_TOKEN));
+//            jsonObject.put("endUrls", new JSONArray(bundle.getStringArrayList("endUrls")));
+//            jsonObject.put("amount", "1.00");
+            jsonObject.put("data", getAppPayEligibilityData());
 
-        Card card = Utils.getCard(cardNumber);
-
-        try {
-            JSONObject payload = new JSONObject();
-            JSONObject object = new JSONObject();
-
-            JSONObject eligibilityObject = new JSONObject();
-            JSONArray cardsArray = new JSONArray();
-            JSONObject cardItem = new JSONObject();
-            if(cardFingerPrint.isEmpty()){
-                cardItem.put("cardAlias", cardNumber.toString());
-            } else
-            cardItem.put("cardAlias",cardFingerPrint);
-            cardItem.put("cardBin", cardNumber.toString().substring(0,7).replace("-",""));
-            JSONArray checkTypeArray = new JSONArray();
-            checkTypeArray.put("otp");
-            checkTypeArray.put("vies");
-            cardItem.put("checkType", checkTypeArray);
-            cardsArray.put(cardItem);
-
-            eligibilityObject.put("cards", cardsArray);
-
-            object.put("requestId", new Random().nextInt(10000)+"");
-            object.put("service", "in.juspay.ec");
-            object.put("betaAssets",Preferences.useBetaAssets );
-            payload.put("action", "eligibility");
-            payload.put("amount", amount);
-
-            payload.put("data", eligibilityObject);
-            object.put("payload", payload);
-
-            Log.d("eligiblelog", object.toString(2));
-            hyperServices.process(object);
-            Log.d("eligiblelog", object.toString(2));
-        } catch (Exception e) {
+            hyperServices.process(jsonObject);
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
     }
+
+//    private void getEligibility() {
+//        String cardNumber = cardNumberField.getText().toString();
+//        String amount = amountField.getText().toString();
+//        String cardFingerPrint = cardFingerPrintField.getText().toString();
+//
+//        Card card = Utils.getCard(cardNumber);
+//
+//        try {
+//
+//
+//            JSONObject mainPayload = new JSONObject();
+//            JSONObject payload = new JSONObject();
+//            JSONObject data = new JSONObject();
+//
+//
+//            mainPayload.put("betaAssets", "false");
+//            mainPayload.put("requestId", "123456");
+//            mainPayload.put("service", "in.juspay.ec");
+//
+//            payload.put("action", "eligibility");
+//            JSONArray appsArray = new JSONArray();
+//            data.put("data", appsArray);
+//            appsArray.put("");
+//
+////            JSONObject eligibilityObject = new JSONObject();
+////            JSONArray cardsArray = new JSONArray();
+////            JSONObject cardItem = new JSONObject();
+////            if(cardFingerPrint.isEmpty()){
+////                cardItem.put("cardAlias", cardNumber.toString());
+////            } else
+////            cardItem.put("cardAlias",cardFingerPrint);
+////            cardItem.put("cardBin", cardNumber.toString().substring(0,7).replace("-",""));
+////            JSONArray checkTypeArray = new JSONArray();
+////            checkTypeArray.put("otp");
+////            checkTypeArray.put("vies");
+////            cardItem.put("checkType", checkTypeArray);
+////            cardsArray.put(cardItem);
+////
+////            eligibilityObject.put("cards", cardsArray);
+////
+////            object.put("requestId", new Random().nextInt(10000)+"");
+////            object.put("service", "in.juspay.ec");
+////            object.put("betaAssets",Preferences.useBetaAssets );
+////            payload.put("action", "eligibility");
+////            payload.put("amount", amount);
+////
+////            payload.put("data", eligibilityObject);
+////            object.put("payload", payload);
+////
+////            Log.d("eligiblelog", object.toString(2));
+////            hyperServices.process(object);
+////            Log.d("eligiblelog", object.toString(2));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public JSONObject getAppPayEligibilityData () throws Exception {
+        JSONObject appPayEligibilityObject = new JSONObject();
+        JSONArray appPayEligibilityArray = new JSONArray();
+        for ( AppPayEligibiltyData data : appPayEligibiltyData){
+            JSONObject appPayEligibiltyItem = new JSONObject();
+                appPayEligibiltyItem.put("mobile", data.mobile);
+            JSONArray checkTypeArray = new JSONArray();
+            if (data.cred)
+                checkTypeArray.put("cred");
+            appPayEligibiltyItem.put("checkType", checkTypeArray);
+            appPayEligibilityArray.put(appPayEligibiltyItem);
+        }
+        appPayEligibilityObject.put("apps", appPayEligibilityArray);
+        appPayEligibilityObject.put("cards", new JSONArray());
+        appPayEligibilityObject.put("wallets", new JSONArray());
+
+        return appPayEligibilityObject;
+    }
+
 
     private static void payOnViesSdk(final MainActivity ctx) {
 
@@ -445,7 +503,7 @@ public class MainActivity extends AppCompatActivity {
         new AsyncTask<Void, Void, JSONObject>() {
             @Override
             protected JSONObject doInBackground(Void... voids) {
-                return Utils.createTxnApi(ctx, orderId, amount, cardNumber, cardExpMonth, cardExpYear, cardCvv, cardAlias);
+                return Utils.createTxnApi(ctx , orderId, amount );
 //                return Utils.getSessionApi(ctx);
             }
 
@@ -464,20 +522,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void payOnViesSdk(String sessionToken, String orderId) {
-        String cardNumber = cardNumberField.getText().toString();
-        String cardCvv = cardCvvField.getText().toString();
-        String cardToken = cardTokenField.getText().toString();
-        String[] expiry = cardExpiryField.getText().toString().split("/");
-        final String cardExpMonth = expiry[0];
-        final String cardExpYear = expiry[1];
-
-
-        String amount = amountField.getText().toString();
-
-
-        Log.d("orderId", orderId);
-
-        Card card = Utils.getCard(cardNumber);
+//        String cardNumber = cardNumberField.getText().toString();
+//        String cardCvv = cardCvvField.getText().toString();
+//        String cardToken = cardTokenField.getText().toString();
+//        String[] expiry = cardExpiryField.getText().toString().split("/");
+//        final String cardExpMonth = expiry[0];
+//        final String cardExpYear = expiry[1];
+//
+//
+//        String amount = amountField.getText().toString();
+//
+//
+//        Log.d("orderId", orderId);
+//
+//        Card card = Utils.getCard(cardNumber);
 
         try {
             JSONObject payload = new JSONObject();
@@ -488,31 +546,36 @@ public class MainActivity extends AppCompatActivity {
             object.put("betaAssets",true);
 
 
-            payload.put("action", "cardTxn");
-            payload.put("authType", "VIES");
+            payload.put("action", "appPayTxn");
             payload.put("orderId", orderId);
-
-            payload.put("paymentMethod","VISA");
-
-            if (cardToken.isEmpty()) {
-                payload.put("cardNumber", cardNumber.toString().substring(0, 19).replace("-", ""));
-                payload.put("cardExpMonth",cardExpMonth);
-                payload.put("cardExpYear",cardExpYear);
-                payload.put("cardAlias",card.getAlias());
-                payload.put("cardBin",card.getBin());
-            }else
-                payload.put("cardToken",cardToken);
-//            payload.put("nameOnCard","Akshy");
-                payload.put("cardSecurityCode",cardCvv);
-                payload.put("saveToLocker",true);
-                payload.put("clientAuthToken",sessionToken);
-                payload.put("endUrls", new JSONArray(endUrls));
-
-                payload.put(PaymentConstants.AMOUNT, amount);
+            payload.put("paymentMethod", "CRED");
+            payload.put("clientAuthToken", sessionToken);
+            payload.put("application", "CRED");
+            payload.put("walletMobileNumber", "70322955");
+//            payload.put("authType", "VIES");
+//            payload.put("orderId", orderId);
+//
+//            payload.put("paymentMethod","VISA");
+//
+//            if (cardToken.isEmpty()) {
+//                payload.put("cardNumber", cardNumber.toString().substring(0, 19).replace("-", ""));
+//                payload.put("cardExpMonth",cardExpMonth);
+//                payload.put("cardExpYear",cardExpYear);
+//                payload.put("cardAlias",card.getAlias());
+//                payload.put("cardBin",card.getBin());
+//            }else
+//                payload.put("cardToken",cardToken);
+////            payload.put("nameOnCard","Akshy");
+//                payload.put("cardSecurityCode",cardCvv);
+//                payload.put("saveToLocker",true);
+//                payload.put("clientAuthToken",sessionToken);
+//                payload.put("endUrls", new JSONArray(endUrls));
+//
+//                payload.put(PaymentConstants.AMOUNT, amount);
                 object.put("payload", payload);
-                payload.put(PaymentConstants.MERCHANT_ID, Preferences.merchantId);
-                payload.put("merchant_root_view", String.valueOf(R.id.main_view));
-                Log.d("payReq", object.toString(2));
+//                payload.put(PaymentConstants.MERCHANT_ID, Preferences.merchantId);
+//                payload.put("merchant_root_view", String.valueOf(R.id.main_view));
+//                Log.d("payReq", object.toString(2));
                 hyperServices.process(object);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -596,7 +659,7 @@ public class MainActivity extends AppCompatActivity {
         new AsyncTask<Void, Void, JSONObject>() {
             @Override
             protected JSONObject doInBackground(Void... voids) {
-                return Utils.createTxnApi(ctx, orderId, amount, cardNumber, cardExpMonth, cardExpYear, cardCvv, cardAlias);
+                return Utils.createTxnApi(ctx, orderId , amount);
             }
 
             @Override
