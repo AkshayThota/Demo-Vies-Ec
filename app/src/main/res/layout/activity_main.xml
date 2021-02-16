@@ -56,112 +56,19 @@
                             android:id="@+id/amountField"
                             android:text="1.00" android:autofillHints="" tools:targetApi="o"/>
                     <TextView
-                            android:text="Card Number"
+                            android:text="Mobile Number"
                             android:layout_width="wrap_content"
-                            android:labelFor="@id/cardNumberField"
+                            android:labelFor="@id/mobileNumberField"
                             android:layout_height="wrap_content"
-                            android:id="@+id/cardNumberLabel" android:layout_marginTop="15dp"/>
+                            android:id="@+id/mobileNumberLabel" android:layout_marginTop="15dp"/>
                     <EditText
                             android:layout_width="300dp"
                             android:layout_height="wrap_content"
                             android:inputType="number"
                             android:ems="10"
-                            android:id="@+id/cardNumberField"
-                            android:hint="0000-0000-0000-0000"
+                            android:id="@+id/mobileNumberField"
                             android:digits="-0123456789"
-                            android:text="4012-0099-9990-0060" android:autofillHints="" tools:targetApi="o"/>
-                    <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" android:layout_marginTop="15dp"
-                            android:baselineAligned="false">
-                        <LinearLayout
-                                android:orientation="vertical"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content" android:layout_weight="1"
-                                android:layout_marginEnd="2.5dp">
-                            <TextView
-                                    android:text="Expiry Date"
-                                    android:labelFor="@id/cardExpiryField"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" android:id="@+id/textView"/>
-                            <EditText
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:inputType="number"
-                                    android:text="10/30"
-                                    android:digits="/0123456789"
-                                    android:hint="mm/yy"
-                                    android:ems="10"
-                                    android:maxLength="5"
-                                    android:id="@+id/cardExpiryField" android:importantForAutofill="no"
-                                    tools:targetApi="o"/>
-                        </LinearLayout>
-                        <LinearLayout
-                                android:orientation="vertical"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content" android:layout_weight="1"
-                                android:layout_marginStart="2.5dp">
-                            <TextView
-                                    android:text="Cvv"
-                                    android:layout_width="match_parent"
-                                    android:labelFor="@id/cardCvvField"
-                                    android:layout_height="wrap_content" android:id="@+id/textView2"/>
-                            <EditText
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:inputType="numberPassword"
-                                    android:hint="***"
-                                    android:maxLength="4"
-                                    android:ems="10"
-                                    android:id="@+id/cardCvvField" android:importantForAutofill="no" tools:targetApi="o"
-                                    android:text="123"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:baselineAligned="false">
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="2.5dp"
-                        android:orientation="vertical">
-
-                    <TextView
-                        android:text="Card Token"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"/>
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/cardTokenField"
-                        android:hint="Get From List Card Api"
-                        android:autofillHints="" tools:targetApi="o"/>
-                    </LinearLayout>
-                        <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="2.5dp"
-                        android:orientation="vertical">
-
-                    <TextView
-                        android:text="Card FingerPrint"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"/>
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/cardFingerPrintField"
-                        android:hint="Get from List Card Api"
-                        android:autofillHints="" tools:targetApi="o"/>
-                    </LinearLayout>
-                    </LinearLayout>
+                            android:text="7976719949" android:autofillHints="" tools:targetApi="o"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
             <TextView
@@ -221,18 +128,6 @@
                             android:text="Pay"
                             android:layout_width="300dp"
                             android:layout_height="wrap_content" android:id="@+id/payButton"/>
-                    <Button
-                            android:text="De-Enroll"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" android:id="@+id/deEnrollButton"/>
-                    <Button
-                            android:text="Delete Card"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" android:id="@+id/deleteCardButton"/>
-                    <Button
-                            android:text="List Card"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" android:id="@+id/listCardButton"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>

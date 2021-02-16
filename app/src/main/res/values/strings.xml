@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Vies Demo</string>
+    <string name="app_name">Cred Checkout</string>
     <string name="prefetch_request">
     boolean useBetaAssets = true;\n\n
     JSONObject payload = new JSONObject();\n

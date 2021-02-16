@@ -43,12 +43,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:labelFor="@id/safetyNetApiKeyField"
+                            android:visibility="gone"
                             android:layout_marginTop="15dp" android:text="Safety Net API Key"/>
                     <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPersonName"
                             android:ems="10"
+                            android:visibility="gone"
                             android:id="@+id/safetyNetApiKeyField" android:importantForAutofill="no"
                             tools:targetApi="o"/>
                     <TextView
@@ -68,10 +70,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:labelFor="@id/appIdField"
+                        android:visibility="gone"
                             android:layout_marginTop="15dp"/>
                     <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                        android:visibility="gone"
                             android:inputType="textPersonName"
                             android:ems="10"
                             android:id="@+id/appIdField" android:importantForAutofill="no"
@@ -128,11 +132,13 @@
                     <TextView
                         android:text="Use Local Eligibility"
                         android:layout_width="match_parent"
+                        android:visibility="gone"
                         android:layout_height="wrap_content"
                         android:labelFor="@id/localEligibility"
                         android:layout_marginTop="15dp"/>
                     <FrameLayout
                         android:layout_width="match_parent"
+                        android:visibility="gone"
                         android:layout_height="wrap_content">
                         <Spinner
                             android:layout_width="match_parent"

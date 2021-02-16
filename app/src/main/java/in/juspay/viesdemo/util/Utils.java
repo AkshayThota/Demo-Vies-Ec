@@ -2,6 +2,8 @@ package in.juspay.viesdemo.util;
 
 import android.content.Context;
 import android.util.Base64;
+import android.util.Log;
+
 import com.google.android.gms.security.ProviderInstaller;
 
 import in.juspay.hypersdk.core.PaymentConstants;
@@ -56,50 +58,39 @@ public final class Utils {
     }
 
     public static JSONObject createTxnApi(Context context , String amount , String orderId) {
-        final String url = "/txns";
+        final String url = "/orders";
         
         final Map<String, String> headers = new HashMap<>();
         final Map<String, String> payload = new HashMap<>();
         final Map<String, String> orderCreatePayload = new HashMap<>();
 
+        JSONObject jsonOrder = new JSONObject();
+
 
         headers.put("Content-Type", "application/x-www-form-urlencoded");
-        headers.put("x-feature", "credCheckout");
-        headers.put("Authorization", Preferences.juspayApiKey);
+//        headers.put("x-feature", "credCheckout");
+        headers.put("Authorization", "Basic OEMwRkY4OTFFMjFFNDZDNkFEQTA5NTRENjg4NUZBQkU=");
+        headers.put("version", "2021-02-01");
 //        headers.put("x-merchantid", Preferences.merchantId);
-
+//    try {
         orderCreatePayload.put(PaymentConstants.ORDER_ID, orderId);
         orderCreatePayload.put(PaymentConstants.AMOUNT, amount);
         orderCreatePayload.put(PaymentConstants.CUSTOMER_ID,Preferences.getCustomerId(context));
         orderCreatePayload.put("return_url", getBaseUrl() + "/end");
         orderCreatePayload.put("options.get_client_auth_token", "true");
-        orderCreatePayload.put("gateway_id", "777");
-        orderCreatePayload.put("metadata.CRED:offers_applied", "false");
-
-        // i am not exactly sure about
-
-//        if(!Preferences.gwRefId.isEmpty()) {
-//            orderCreatePayload.put("metadata.CYBERSOURCE:gateway_reference_id", "54d231f3fc2147cfbe1b5898ecf2394a");
-//            orderCreatePayload.put("metadata.CCAVENUE_V2:gateway_reference_id", "54d231f3fc2147cfbe1b5898ecf2394a");
-//        }
+//        orderCreatePayload.put("gateway_id", "777");
+//        orderCreatePayload.put("metadata.CRED:offers_applied", "false");
+//    } catch (JSONException e) {
+//        e.printStackTrace();
+//    }
 
         for (Map.Entry<String, String> entry : orderCreatePayload.entrySet()) {
-            payload.put("order." + entry.getKey(), entry.getValue());
+            payload.put( entry.getKey(), entry.getValue());
         }
-//
-//        payload.put(PaymentConstants.MERCHANT_ID, Preferences.merchantId);
-//        payload.put("payment_method_type", "CARD"); // Accepted values are CARD/NB
-//        payload.put("payment_method", "VISA");      // VISA / Mastercard
-//        payload.put("auth_type", "VIES");
-//        payload.put("card_number", cardNumber.replaceAll("-", ""));
-//        payload.put("card_exp_month", cardExpMonth);
-//        payload.put("card_exp_year", cardExpYear);
-//        payload.put("card_security_code", cardCvv);
-//        payload.put("card_alias", cardAlias);
-//        payload.put("format", "json");
-//        payload.put("save_to_locker","true");
 
+        Log.d("orderPayload", payload.toString());
         try {
+            Log.d("orderPayload", String.valueOf(payload));
             return fromResponse(createRequest(context, url, "POST", headers, payload));
         } catch (JSONException | IOException e) {
             e.printStackTrace();

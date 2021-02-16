@@ -13,7 +13,7 @@ repositories {
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "in.juspay.viesdemo"
+        applicationId "in.juspay.viesdemo2"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
@@ -35,7 +35,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
 
 
-    implementation 'in.juspay:hypersdk:2.0.1-alpha.33'
+    implementation 'in.juspay:hypersdk:2.0.1-rc.86'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
