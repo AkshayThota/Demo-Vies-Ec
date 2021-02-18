@@ -2,6 +2,8 @@ package in.juspay.viesdemo.util;
 
 import android.content.Context;
 import android.util.Base64;
+import android.util.Log;
+
 import com.google.android.gms.security.ProviderInstaller;
 
 import in.juspay.hypersdk.core.PaymentConstants;
@@ -69,6 +71,9 @@ public final class Utils {
         orderCreatePayload.put(PaymentConstants.AMOUNT, amount);
         orderCreatePayload.put(PaymentConstants.CUSTOMER_ID,Preferences.getCustomerId(context));
         orderCreatePayload.put("return_url", getBaseUrl() + "/end");
+        orderCreatePayload.put("order.customer_email", "test@juspay.in");
+        orderCreatePayload.put("order.customer_phone", "9999999999");
+
         orderCreatePayload.put("options.get_client_auth_token", "true");
         if(!Preferences.gwRefId.isEmpty()) {
             orderCreatePayload.put("metadata.JUSPAY:gateway_reference_id", Preferences.gwRefId);
@@ -89,6 +94,7 @@ public final class Utils {
         payload.put("card_alias", cardAlias);
         payload.put("save_to_locker", "true");
         payload.put("format", "json");
+        Log.d("OrderCreate", payload.toString());
 
         try {
             return fromResponse(createRequest(context, url, "POST", headers, payload));
