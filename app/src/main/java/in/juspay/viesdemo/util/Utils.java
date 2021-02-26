@@ -71,8 +71,8 @@ public final class Utils {
         orderCreatePayload.put(PaymentConstants.AMOUNT, amount);
         orderCreatePayload.put(PaymentConstants.CUSTOMER_ID,Preferences.getCustomerId(context));
         orderCreatePayload.put("return_url", getBaseUrl() + "/end");
-        orderCreatePayload.put("order.customer_email", "test@juspay.in");
-        orderCreatePayload.put("order.customer_phone", "9999999999");
+        orderCreatePayload.put("customer_email", "test@juspay.in");
+        orderCreatePayload.put("customer_phone", "9999999999");
 
         orderCreatePayload.put("options.get_client_auth_token", "true");
         if(!Preferences.gwRefId.isEmpty()) {
